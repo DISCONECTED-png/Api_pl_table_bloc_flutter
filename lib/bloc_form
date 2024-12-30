@@ -1,0 +1,53 @@
+import 'package :flutter_bloc/flutter_bloc.dart';
+
+class FormEvent {}
+
+class FormSubmitEvent extends FormEvent {
+  final String name;
+  final String email;
+  final String phone;
+  final String gender;
+  final String country;
+  final String state;
+  final String city;
+
+  FormSubmitEvent({
+    required this.name,
+    required this.email,
+    required this.phone,
+    required this.gender,
+    required this.country,
+    required this.state,
+    required this.city,
+  });
+}
+
+class FormState {
+  final bool isSubmitting;
+  final bool isSuccess;
+  final bool isFailure;
+
+  FormState({
+    required this.isSubmitting,
+    required this.isSuccess,
+    required this.isFailure,
+  });
+
+  factory FormState.initial() {
+    return FormState(isSubmitting: false, isSuccess: false, isFailure: false);
+  }
+}
+
+class FormBloc extends Bloc<FormEvent, FormState> {
+  FormBloc() : super(FormState.initial());
+
+  @override
+  Stream<FormState> mapEventToState(FormEvent event) async* {
+    if (event is FormSubmitEvent) {
+      yield FormState(isSubmitting: true, isSuccess: false, isFailure: false);
+      // Simulate a network call
+      await Future.delayed(Duration(seconds: 2));
+      yield FormState(isSubmitting: false, isSuccess: true, isFailure: false);
+    }
+  }
+}
